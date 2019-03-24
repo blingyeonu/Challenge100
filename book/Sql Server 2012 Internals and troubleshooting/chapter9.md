@@ -84,5 +84,27 @@ SQL 문제 해결을 위해서는 다음의 3단계를 따른다.
 * 문제가 발생하지 않을 때의 상태 확인하기.
 
 -> 관련되 보이지 않은 작은 것도 그냥 넘어가는 것은 옳지 않다. 어떠한 변화, 윈도우 및 sql 서버 패치, 새로운 정책 및 권한, 설정 옵션, 스키마 변경 등을 가볍게 넘어가면 안된다.
-	
 
+문제의 분리
+* 문제가 발생했을 때 그 문제의 원인을 DB에서 볼수 있는 명확한 근거가 있는가? 많은 문제가 다양한 원인을 가지고 있다. 그래서 문제를 명확히 하기 위해서는 발생한 문제를 분해하는 것이 중요하다. 문제 원인에 대한 주요 범주는 아래와 같다.
+	* 연결문제 - 프로토콜 문제, 어플리케이션, 유저, 클라이언트 워크스테이션, 서브넷과 같은 연결에서 문제가 발생하는지? 단지 Double Hops, Direct Connect에 문제가 있는지? 로컬연결은 되지만 원격연결은 안되는지? Name연결의 이슈인지, 라우팅 체크가 되었는지? DAC(Dedicated Administrator Connection)으로 연결되었는지? 등 다양한 연결 문제를 고려할 수 있다.
+	* 성능문제 - 문제가 발생하는 지점을 결정해야 한다. 클라이언트인지, 미들웨어인지, SQL 서버의 문제인지, 네트워크의 문제인지 확인해야 한다. 예를 들어 10초의 성능이 걸리는 쿼리가 있을 때 원격과 로컬에서 각 실행해보는 것이다.
+	* 하드웨어 병목 - 디스크, CPU, 네트워크, 메모리의 문제인지 확인하는 것, 다양한 툴들로 가장 성능이 좋지 않은 쿼리를 확인하여 조사한다.
+	* SQL Server 문제 - SQL Server는 한정된 자원을 가지고 있다. locks, latches, worker threads, shared resources (예 temp db)등의 자원들을 DMV를 통해 조사한다.
+	* Compilation issues - 쿼리 플랜, 통계의 유효성, 비효율 적인 index, plan cache 등을 확인한다.
+
+자원 병목현상 
+* 자원 문제 해결은 병목현상을 수반한다. 이미 존재했던 것일 수 있고, 문제발생하는 동안 데이터 수집을 통해 분석할 수 있다. 이러한 병목을 하나 해결할 때 다른 병목현상을 찾아서 해결하는 작업을 반복해야한다.
+* Memory - 메모리 문제는 물리적인 메모리를 늘릴것인지, 메모리의 설정 옵션을 변경할 것인지 체크해 볼 필요가 있다. 또한 32bit의 sql server를 사용하고 있다면 64bit 버전으로 변경하는 것도 고려해보아야한다. 또한 메모리를 많이 사용하는 쿼리를 확인하여 쿼리 플랜을 확인할 필요가 있다. 
+* CPU - CPU 문제는 자주 또는 가끔 발생하는 것이다. 자주 발생하는 CPU문제는 주로 CPU 수의 문제이다. 쿼리가 대기하는 시간이 길다면 병목 문제인지 확인이 필요하다. CPU 갯수를 늘릴것인지 속도를 높일것인지 병렬처리가 의도된 것인지 아닌지 확인이 필요하다. Top 10의 나쁜 성능을 가진 쿼리를 튜닝하는 것이 필요하다.(hash join, sort, computed column)
+* Storage I/O - 메모리와 CPU보다 느리다. 그래서 고려할 사항은 Average Disk Sec/Read와 Average Disk Sec/Write를 확인 해야 한다. 보통 OLTP 시스템은 20milliseconds보다 낮아야 좋은 성능이라고 할 수 있다. STATISTICS IO 캐쉬를 확인한다. Storage 성능은 아래 사항들을 고려한다. 
+	* Raid level
+	* Disk Type(enterprise flash disk, SCSI)
+	* Dedicated or shared disk arrays
+	* Connectivity(InfiniBand, Fibre Channel, iSCSI)
+	* HBA cache and queue settings
+	* HBA load balancing policy(active, active vs. active; or passive)
+	* NTFS cluster size
+	* Layout and isolation of data, index, log, and tempdb files
+	* Storage cache and controllers policy
+* Network - 언뜻 보면 SQL Server의 문제라고 인식할 수 있다. 쿼리 결과가 보내지지 않거나 받는 속도가 지연될경우 SQL server가 느린것 처럼 보일 수 있다. 이 경우 SQL Server의 상호작용을 기능적으로 조사해보아야한다. SQL profiler와 같은 툴로 실행되는 프로시저, 함수, 쿼리들을 실행해 보아야한다. 
