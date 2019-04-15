@@ -34,5 +34,7 @@
   * Auto-Scaling 가능: 이전에는 특정 값이 높거나 너무 낮아서 보기가 불편해서 특정 값이 튀게 되는데 2008에서는 데이터를 좀 더 보기 쉽도록 맞춰준다.
   * Show/Hide 가능: 보고싶은 값만 보거나 필요 없는 값은 숨길 수 있다.
   
-* [NewPerfmon For SQLSERVER 2012 Link] (https://github.com/blingyeonu/Challenge100/blob/master/book/Sql%20Server%202012%20Internals%20and%20troubleshooting/SQLServer-Performance-Poster.pdf)
+  * 링크 참고 - 
+  [Perfmon_For_SQLSERVER](https://github.com/blingyeonu/Challenge100/blob/master/book/Sql%20Server%202012%20Internals%20and%20troubleshooting/SQLServer-Performance-Poster.pdf)
+
   
