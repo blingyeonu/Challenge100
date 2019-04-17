@@ -37,4 +37,21 @@
   * 링크 참고 - 
   [Perfmon_For_SQLSERVER](https://github.com/blingyeonu/Challenge100/blob/master/book/Sql%20Server%202012%20Internals%20and%20troubleshooting/SQLServer-Performance-Poster.pdf)
 
+* PerfMon 시작하기
+  * 시작 -> 모든 프로그램 -> 관리자툴에서 선택 또는 윈도우키+R 실행창 열리면 perfmon 입력
+  * 실시간 또는 추적 성으로 모니터링이 가능하다.
+  * 실시간 모니터링하기 Monitoring Tools>Permformance Monitor 를 클릭하면 실시간으로 서버 자원의 상태를 확인할 수 있다.
+  * 서버에서 기본 제공하는 포맷 말고 사용자가 원하는 것을 선택하여 모니터링 할 수 있다.
+  * Data collector sets > system 기본 모니터링 포맷을 이용가능 하며 해당 항목 우클릭 start를 클릭하면 모니터링이 시작 가능하다.
+  * 기본적으로 CPU, Disk, Memory, Network 모니터링이 가능하다
+  * Data collector sets > Userdefined 우클릭 New > Data Collector set을 선택하면 사용자 필요에 맞게 옵션을 선택할 수 있다.
   
+* Data Collector Set Logging option
+  1. Perfmonce Counter: Windows, SqlServer의 거의 모든 측면의 성능 데이터 제공
+  1. Event trace data: Windows를 위한 이벤트 추적을 활용, low-level의 운영체제 추적
+  1. System Configuration information: 레지스트리 키 캡쳐
+  
+* 유저가 원하는 옵션으로 데이터 셋을 만들면 시작, 종료, 스케줄을 지정할 수 있다. 스케줄을 활용하여 원하는 시간대 혹은 일정 사이즈까지만 수집을 하고 새로 파일을 생성하는 등의 기능을 활용할 수 있다.
+* 로그 포맷은 csv, tsv, SQL, Binary 이렇게 4종류로 설정가능하다.
+* 원격서버의 수집도 가능하다(실제로 원격 수집은 해보지 않았다. 나중에 테스트 해보고 싶음)
+
