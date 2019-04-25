@@ -106,3 +106,24 @@
     * 통계 누락, 통계 기한 지남: 쿼리 최적화기가 오래된 통계나 통계가 없어서 실행 시 서브 단계의 최적화로 실행됨
     * 인덱스 누락: 인덱스 누락은 CPU가 많은 자원을 쓰도록 한다. SQL server는 인덱스에 의존하여 검색을 하기 때문에 인덱스가 없으면... (그렇다고 인덱스를 막... 만드는 것도 옳지는 않다...)
     * 과도한 리컴파일: 실행계획을 올려둔 것이 자꾸 초기화 된다. 과도한 리컴파일은 옳지 않다.
+
+2. 메모리 진단법
+  * SQL Server 성능은 충분한 메모리 확보와 연관 있다.
+  * sp_configure 
+    * MIN/MAX server Memory
+    * AWE Enabled
+    * Min memory per query
+  * Windows
+    * /3GB, /USERVA, /PAE (in 32-bit 환경)
+  * Perfmon으로 신뢰할 수 있는 메모리 측정이 가능하다.
+    * SQL server에서 Memory pressure는 외부/내부로 나뉜다. 외부요인은 sql server의 메모리를 sql server 외의 다른 프로그램과 공유 하기 때문에 나타난다. 내부는 SQL server 내에서 메모리를 차지하기 위해 경쟁하는 것이다. DBCC MEMORYSTATUS 명령어를 통해 메모리 이용현황에 대해 확인할 수 있다.
+    * 가상 메모리공간.(VAS) VAS는 OS가 32bit, 64bit에 따라 다르다. 외부메모리공간이 있어도 VAS를 다 써버리는 경우가 있다.
+  * Memory Counter
+    * Memory / AvailableMbytes / 사용가능한 물리 메모리 공간 / <100
+    * Memory / Page/sec / 값이 높은것은 문제가 되지 않는다. 외부 Memory pressure가 있는지 살펴야 한다. / <500
+    * Memory / Freesystem page Entries/ 페이지 테이블 엔트리 고갈 확인 / <5000
+    * Paging File / %Usage, %Usage Peak / 페이지 파일을 많이 요구할 때 VAS로 요청이 증가함 / > 70%
+    * MSSQL Buffer Manager / Page Life Expectancy / 데이터 페이지가 버퍼 풀에 상주하는 시간(초), 충분한 메모리를 가지면 평균 적으로 존재하는 시간이 길다. / <300seonds
+    * MSSQL Buffer Manager / Buffer Cache Hit Ratio / 버퍼풀에서 데이터 페이지에 의해 페이지 요청이 성공한 퍼센트 / <98%
+    * MSSQL Buffer Manager / Lazy Writes/sec / sql server의 버퍼풀에서 디스크로 더디페이지가 재 배치되는 초당 회수 / >20
+    
