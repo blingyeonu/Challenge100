@@ -135,3 +135,23 @@
     * Physical Disk / Avg.disk sec/Read / 디스크에서 읽기를 마치는데 소요되는 평균시간 (초) / >0.010 Sub-Optimal, >0.020 Poor
     * Physical Disk / Avg.disk sec/Write / 디스크에서 쓰기를 마치는데 소요되는 평균시간 (초) / >0.010 Sub-Optimal, >0.020 Poor
     
+4. SQL Server 문제
+  * 자원의 문제가 아니라 SQL Server 자체의 문제일 수 있다.
+    * MSSQL SQL Statistics / Batch Requests/sec / SQL server에서 돌고 있는 배치의 수, 높을수록 좋음 / >1000 indicates a server with high activicty
+    * MSSQL SQL Statistics / SQL Compilations/sec / 1초당 컴파일 계획이 필요한 배치의 수 / >20% Batch requests/sec
+    * MSSQL SQL Statistics / SQL Recompilations/sec / 1초당 리컴파일이 상태 수 / >20% Batch Requests/sec
+    * MSSQL General Statistics / Processes Blocked / 최근에 블록된 프로세스 수 / 조사시점에서 >0
+    * MSSQl Locks / Lock Waits/sec / 1초당 wait lock의 수, 직접적 block / >0
+    * MSSQl Locks / Lock Timeouts/sec / 1초당 lock timecout 수 조사될 때 1보다 크면 안됨 / >0
+    * MSSQL Transactions / Free Space intempdb(KB) / TempDB의 가능 메모리 / <100MB
+    
+  * SQL server의 wait type들은 자원들을 써서 다른 자원들이 이용못하게 할 수 있으므로 각 타입들의 종류를 알고 있자.
+    * Lock Waits
+    * Log writh waits
+    * Network I/O waits
+    * Non-page latch waits
+    * Page I/O latch waits
+    * Page latch waits
+    * Waits for the worker
+    
+  -- 10장 
