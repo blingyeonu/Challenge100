@@ -55,10 +55,10 @@ Report Properties에서 Variable 옵션부분에 Read-Only  체크해제 반드�
 
 #### DynamicGroups
 
-Matrix로 설정
-두 개의 Row group(Parent, Child), 한 개의 Column group
-Parameter 3개 추가 Parent, child, Column
-Parent에 Parent, Child 추가
-Column에 원하는 항목 추가
-Child에 = IIF(Parameters!ParentRowGroupParam.Value="Parent","Child", Nothing) / Another 추가
-Group Property에서 Group On Expression에서 각각 = Fields(Parameters!ParentRowGroupParam.Value).Value 와 같은 형식으로 변경
+* Matrix로 설정
+* 두 개의 Row group(Parent, Child), 한 개의 Column group
+* Parameter 3개 추가 Parent, child, Column
+* Parent에 Parent, Child 추가
+* Column에 원하는 항목 추가
+* Child에 = IIF(Parameters!ParentRowGroupParam.Value="Parent","Child", Nothing) / Another 추가
+* Group Property에서 Group On Expression에서 각각 = Fields(Parameters!ParentRowGroupParam.Value).Value 와 같은 형식으로 변경
